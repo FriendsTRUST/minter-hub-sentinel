@@ -1,0 +1,66 @@
+project_name: minter-hub-sentinel
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - goos:
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    targets:
+      - linux_amd64
+    env:
+      - CGO_ENABLED=1
+    ldflags:
+      - -s -w
+
+archives:
+  - replacements:
+      linux: Linux
+      386: i386
+      amd64: x86_64
+
+    format_overrides:
+      - goos: windows
+        format: zip
+
+    files:
+      - config.example.yaml
+
+dockers:
+  - goos: linux
+    goarch: amd64
+
+    ids: ["minter-hub-sentinel"]
+
+    image_templates:
+      - "friendstrust/minter-hub-sentinel:{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+      - "friendstrust/minter-hub-sentinel:{{ .Major }}.{{ .Minor }}"
+      - "friendstrust/minter-hub-sentinel:{{ .Major }}"
+      - "friendstrust/minter-hub-sentinel:latest"
+
+    dockerfile: Dockerfile
+
+    extra_files:
+      - cmd
+      - config
+      - services
+      - go.mod
+      - go.sum
+      - main.go
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^*.md:"

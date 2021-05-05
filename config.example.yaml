@@ -1,0 +1,15 @@
+telegram:
+  # Leave empty if you don't want to receive Telegram notifications
+  token: ''
+  # You can get your ID from @myidbot
+  admins:
+  # - 12345
+
+minter_hub:
+  # List of Node API URLs
+  api:
+    - http://127.0.0.1:1317
+  # Validator address (sha256 of public key and take first 20 bytes)
+  validator_address: ""
+  # Number of seconds to sleep between checking for missed blocks
+  sleep: 1
